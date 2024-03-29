@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 public class LandingFrame extends JFrame  implements ActionListener {
   JLabel label = new JLabel();
   JButton button = new JButton("Continue"); 
-  //ImageIcon image = new ImageIcon("Frames\\pictures\\title.png");
+  //ImageIcon image = new ImageIcon("");
   Border border = BorderFactory.createLineBorder(new Color(254, 200, 216), 5);
 
     LandingFrame() {
@@ -26,8 +26,8 @@ public class LandingFrame extends JFrame  implements ActionListener {
         setResizable(false);
         setLayout(null);
         setVisible(true);
-        ImageIcon icon = new ImageIcon("Frames\\pictures\\Untitled_design-removebg-preview.png");
-        setIconImage(icon.getImage());
+        //ImageIcon icon = new ImageIcon("");
+        //setIconImage(icon.getImage());
 
         // image/logo design
         //label.setIcon(image);
