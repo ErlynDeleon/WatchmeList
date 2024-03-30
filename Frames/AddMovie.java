@@ -118,6 +118,8 @@ public class AddMovie extends JFrame {
         setResizable(false);
         setLayout(null);
         setVisible(true);
+        ImageIcon icon = new ImageIcon("Frames\\pictures\\photo_2024-03-30_23-39-13.jpg");
+        setIconImage(icon.getImage());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(titlePanel);
         add(addPanel);

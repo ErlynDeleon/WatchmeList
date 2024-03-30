@@ -123,8 +123,8 @@ public class ProgrammersProfileExit extends JFrame implements ActionListener{
 
         // Frame settings
         this.add(label);
-        ImageIcon icon = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
-        this.setIconImage(icon.getImage());
+        ImageIcon icon = new ImageIcon("Frames\\pictures\\photo_2024-03-30_23-39-13.jpg");
+        setIconImage(icon.getImage());
         this.setTitle("SnapSack");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setBackground(new Color(243, 248, 255));

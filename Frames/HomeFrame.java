@@ -105,7 +105,7 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
         setResizable(false);
         setLayout(null);
         setVisible(true);
-        ImageIcon icon = new ImageIcon("");
+        ImageIcon icon = new ImageIcon("Frames\\pictures\\photo_2024-03-30_23-39-13.jpg");
         setIconImage(icon.getImage());
         add(navigationPanel);
         add(menuBar);
@@ -171,8 +171,8 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
            // update.setLocationRelativeTo(null);
         } else if (e.getSource() == saveButton) {
             try {
-                SaveButton saveButton = new SaveButton(this); // Instantiate the SaveButton class
-                saveButton.saveWatchlistToFile(); // Call the saveWatchlistToFile method from the instantiated object
+                SaveButton saveButton = new SaveButton(this); 
+                saveButton.saveWatchlistToFile();
                 JOptionPane.showMessageDialog(null, "Watchlist data saved successfully.", "Saved", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Failed to save watchlist data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -195,28 +195,36 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
         mainPanel.removeAll();
 
         List<Movie> movies = MovieList.getInstance().getMovies();
-
+    
         mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 33, 40));
-
+    
+        int count = 0; 
+    
         for (Movie movie : movies) {
+            if (count >= 12) {
+                JOptionPane.showMessageDialog(null, "We apologize, but the program cannot handle more than 12 movies at once. Please remove a movie to add another one.", "Limit Exceeded", JOptionPane.ERROR_MESSAGE);
+                break; 
+            }
+    
             JPanel moviePanel = new JPanel(new GridLayout(4, 1));
             moviePanel.setBackground(new Color(255, 199, 199));
             moviePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-
+    
             JLabel titleLabel = new JLabel("Title: " + movie.getTitle());
             JLabel genreLabel = new JLabel("Genre: " + movie.getGenre());
             JLabel yearLabel = new JLabel("Year: " + movie.getReleaseYear());
-
+    
             JCheckBox checkBox = new JCheckBox();
-
+    
             moviePanel.setPreferredSize(new Dimension(200, 150));
-
+    
             moviePanel.add(titleLabel);
             moviePanel.add(genreLabel);
             moviePanel.add(yearLabel);
             moviePanel.add(checkBox);
-
+    
             mainPanel.add(moviePanel);
+            count++; 
         }
         mainPanel.revalidate();
         mainPanel.repaint();
@@ -226,30 +234,24 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
         try (BufferedReader reader = new BufferedReader(new FileReader("watchlist.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                // Split the line into parts and create a movie object
                 String[] parts = line.split(", ");
                 if (parts.length >= 3) {
                     String title = parts[0];
                     String genre = parts[1];
                     int releaseYear = Integer.parseInt(parts[2]);
                     Movie movie = new Movie(title, genre, releaseYear);
-                    // Add the movie to the MovieList singleton
                     MovieList.getInstance().addMovie(movie);
                 }
             }
-            // Display the loaded movies
             displayMovies();
         } catch (IOException | NumberFormatException ex) {
-            // Handle the exception
             ex.printStackTrace();
         }
     }
 
     @Override
     public void onSaveSuccess() {
-        // Refresh the displayed movies after successful save
         displayMovies();
-        // Optionally, display a success message
         JOptionPane.showMessageDialog(this, "Watchlist data saved successfully.", "Saved", JOptionPane.INFORMATION_MESSAGE);
     }
 }
