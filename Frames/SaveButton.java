@@ -45,7 +45,7 @@ public class SaveButton extends JPanel {
         String filename = "watchlist.txt"; // Define the filename for saving the watchlist
 
         // Open a FileWriter with append mode to avoid overwriting existing data
-        try (FileWriter writer = new FileWriter(filename, false);
+        try (FileWriter writer = new FileWriter(filename, false); // Pass 'false' to overwrite the existing file
              BufferedWriter bufferedWriter = new BufferedWriter(writer)) {
 
             // Write each movie's details to the file
