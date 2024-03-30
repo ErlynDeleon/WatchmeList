@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class HomeFrame extends JFrame{
+public class HomeFrame extends JFrame implements ActionListener{
   JLabel label = new JLabel();
 
     //for navigation panel
@@ -37,23 +37,28 @@ public class HomeFrame extends JFrame{
         navigationPanel.setBounds(970, 0, 120, 700);
 
         //add button settings
-        addButton.setBounds(32, 170, 50, 50); 
+        addButton.setBounds(32, 170, 50, 50);
+        addButton.addActionListener(this);
         navigationPanel.add(addButton); 
 
         //remove button settings
         removeButton.setBounds(32, 270, 50, 50);
+        removeButton.addActionListener(this);
         navigationPanel.add(removeButton);
 
         //update button settings
         updateButton.setBounds(32, 370, 50, 50);
+        updateButton.addActionListener(this);
         navigationPanel.add(updateButton);
 
         //save button settings
         saveButton.setBounds(5, 530, 105, 40);
+        saveButton.addActionListener(this);
         navigationPanel.add(saveButton);
 
         //continue button settings
         exitButton.setBounds(5, 580, 105, 40);
+        exitButton.addActionListener(this);
         navigationPanel.add(exitButton);
 
         //menu bar settings
@@ -66,6 +71,7 @@ public class HomeFrame extends JFrame{
 
         //search button settings
         searchButton.setBounds(900, 5, 50, 50);
+        searchButton.addActionListener(this);
         menuBar.add(searchButton);
 
         //main panel settings
@@ -87,4 +93,34 @@ public class HomeFrame extends JFrame{
         add(menuBar);
         add(mainPanel);
   }
+  @Override
+          public void actionPerformed(ActionEvent e) {
+            //for navigation buttons
+            if (e.getSource() == addButton) {
+              AddMovie add= new AddMovie();
+              add.setVisible(true);
+              add.setLocationRelativeTo(null);
+            }
+            else if(e.getSource() == removeButton){
+            }
+            else if(e.getSource() == updateButton){
+              UpdateMovie update= new UpdateMovie();
+              update.setVisible(true);
+              update.setLocationRelativeTo(null);
+            }
+            else if(e.getSource() == saveButton){
+            }
+            else if(e.getSource() == exitButton){
+              ProgrammersProfileExit profileExit= new ProgrammersProfileExit();
+              profileExit.setVisible(true);
+              profileExit.setLocationRelativeTo(null);
+              this.dispose();
+            }
+            //for menu bar button
+            else if(e.getSource() == searchButton){
+              SearchMovie searchMovie= new SearchMovie();
+              searchMovie.setVisible(true);
+              searchMovie.setLocationRelativeTo(null);
+            }
+          };
 }
