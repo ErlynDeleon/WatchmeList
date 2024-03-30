@@ -2,15 +2,22 @@ package Frames;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+// Define an interface to notify the main panel after successful save
+interface SaveListener {
+    void onSaveSuccess();
+}
 
 public class SaveButton extends JPanel {
-    public SaveButton() {
-        // Since we're using JPanel as the base class, we don't need to call super() explicitly
-        //setLayout(new BorderLayout()); // No need for layout in this case
-        
+    private SaveListener saveListener; // Listener reference
+
+    public SaveButton(SaveListener saveListener) {
+        this.saveListener = saveListener; // Assign listener reference
+
         // Create the "Save" button
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(new ActionListener() {
@@ -20,12 +27,14 @@ public class SaveButton extends JPanel {
                 try {
                     saveWatchlistToFile();
                     JOptionPane.showMessageDialog(null, "Watchlist data saved successfully.", "Saved", JOptionPane.INFORMATION_MESSAGE);
+                    // Notify the main panel after successful save
+                    saveListener.onSaveSuccess();
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "Failed to save watchlist data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-        
+
         // Add the button to the panel
         add(saveButton); // Add button directly to this panel
     }
@@ -34,9 +43,9 @@ public class SaveButton extends JPanel {
         // Get the watchlist from MovieList singleton
         MovieList movieList = MovieList.getInstance();
         String filename = "watchlist.txt"; // Define the filename for saving the watchlist
-        
+
         // Open a FileWriter with append mode to avoid overwriting existing data
-        try (FileWriter writer = new FileWriter(filename, true); // false pag gusto idelete
+        try (FileWriter writer = new FileWriter(filename, false);
              BufferedWriter bufferedWriter = new BufferedWriter(writer)) {
 
             // Write each movie's details to the file
