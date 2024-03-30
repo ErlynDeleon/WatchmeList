@@ -14,6 +14,7 @@ public class SearchMovie extends JFrame{
         setLocationRelativeTo(null);
         setResizable(false);
         setLayout(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
   }
 

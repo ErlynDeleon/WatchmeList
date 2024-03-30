@@ -4,8 +4,16 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import java.awt.*;
+import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.text.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 public class HomeFrame extends JFrame implements ActionListener{
   JLabel label = new JLabel();
@@ -63,7 +71,7 @@ public class HomeFrame extends JFrame implements ActionListener{
         navigationPanel.add(exitButton);
 
         //menu bar settings
-        menuBar.setBackground(new Color(255, 199, 199));
+        menuBar.setBackground(new Color(255, 148, 148));
         menuBar.setBounds(0, 0, 970, 60);
 
         //menu bar components
@@ -99,9 +107,16 @@ public class HomeFrame extends JFrame implements ActionListener{
           public void actionPerformed(ActionEvent e) {
             //for navigation buttons
             if (e.getSource() == addButton) {
-              AddMovie add= new AddMovie();
+              AddMovie add = new AddMovie();
               add.setVisible(true);
               add.setLocationRelativeTo(null);
+
+              add.addWindowListener((WindowListener) new WindowAdapter() {
+                  @Override
+                  public void windowClosed(WindowEvent e) {
+                      displayMovies();
+                  }
+              });
             }
             else if(e.getSource() == removeButton){
             }
@@ -125,4 +140,35 @@ public class HomeFrame extends JFrame implements ActionListener{
               searchMovie.setLocationRelativeTo(null);
             }
           };
-}
+
+          private void displayMovies() {
+            mainPanel.removeAll();
+        
+            List<Movie> movies = MovieList.getInstance().getMovies();
+        
+            mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 33, 40)); 
+        
+            for (Movie movie : movies) {
+                JPanel moviePanel = new JPanel(new GridLayout(4, 1)); 
+                moviePanel.setBackground(new Color(255, 199, 199));
+                moviePanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        
+                JLabel titleLabel = new JLabel("Title: " + movie.getTitle());
+                JLabel genreLabel = new JLabel("Genre: " + movie.getGenre());
+                JLabel yearLabel = new JLabel("Year: " + movie.getReleaseYear());
+        
+                JCheckBox checkBox = new JCheckBox();
+        
+                moviePanel.setPreferredSize(new Dimension(200, 150)); 
+        
+                moviePanel.add(titleLabel);
+                moviePanel.add(genreLabel);
+                moviePanel.add(yearLabel);
+                moviePanel.add(checkBox);
+        
+                mainPanel.add(moviePanel);
+            }
+            mainPanel.revalidate();
+            mainPanel.repaint();
+        }
+        }

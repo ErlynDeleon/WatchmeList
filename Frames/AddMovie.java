@@ -2,6 +2,8 @@ package Frames;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class AddMovie extends JFrame {
     JLabel label = new JLabel();
@@ -56,6 +58,39 @@ public class AddMovie extends JFrame {
         yearTextField.setBounds(350, 260, 250, 40); 
 
         submitButton.setBounds(290, 350, 100, 30); 
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String title = titleTextField.getText();
+                String genre = genreTextField.getText();
+                String yearText = yearTextField.getText();
+        
+                if (title.isEmpty() || genre.isEmpty() || yearText.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please fill out all fields.");
+                    titleTextField.setText("");
+                    genreTextField.setText("");
+                    yearTextField.setText("");
+                    return;
+                }
+        
+                int year;
+                try {
+                    year = Integer.parseInt(yearText);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Invalid year format. Please enter a valid year.");
+                    yearTextField.setText("");
+                    return; 
+                }
+        
+                Movie newMovie = new Movie(title, genre, year);
+        
+                MovieList.getInstance().addMovie(newMovie);
+        
+                JOptionPane.showMessageDialog(null, "Movie added successfully!");
+        
+                dispose();
+            }
+        });
 
         addPanel.add(titleLabel);
         addPanel.add(titleTextField);
@@ -73,6 +108,7 @@ public class AddMovie extends JFrame {
         setResizable(false);
         setLayout(null);
         setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         add(titlePanel);
         add(addPanel);
     }
