@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 
 public class HomeFrame extends JFrame implements ActionListener{
   JLabel label = new JLabel();
@@ -38,6 +39,7 @@ public class HomeFrame extends JFrame implements ActionListener{
 
     //for main panel
     JPanel mainPanel = new JPanel(null);
+    
 
   HomeFrame(){
         //navigation panel settings
@@ -97,8 +99,8 @@ public class HomeFrame extends JFrame implements ActionListener{
         setResizable(false);
         setLayout(null);
         setVisible(true);
-        //ImageIcon icon = new ImageIcon("");
-        //setIconImage(icon.getImage());
+        ImageIcon icon = new ImageIcon("");
+        setIconImage(icon.getImage());
         add(navigationPanel);
         add(menuBar);
         add(mainPanel);
@@ -125,12 +127,17 @@ public class HomeFrame extends JFrame implements ActionListener{
               update.setVisible(true);
               update.setLocationRelativeTo(null);
             }
-            else if(e.getSource() == saveButton) {
-              // Create an instance of SaveButton
-              SaveButton savePanel = new SaveButton();
-              // Show the panel in a dialog
-              JOptionPane.showMessageDialog(null, savePanel, "Saved", JOptionPane.INFORMATION_MESSAGE);
-          }
+            else if (e.getSource() == saveButton) {
+          try {
+        // Handle the action when the "Save" button is clicked
+            SaveButton saveButton = new SaveButton(); // Instantiate the SaveButton class
+            saveButton.saveWatchlistToFile(); // Call the saveWatchlistToFile method from the instantiated object
+           JOptionPane.showMessageDialog(null, "Watchlist data saved successfully.", "Saved", JOptionPane.INFORMATION_MESSAGE);
+         } catch (IOException ex) {
+        JOptionPane.showMessageDialog(null, "Failed to save watchlist data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
           
             
             else if(e.getSource() == exitButton){
