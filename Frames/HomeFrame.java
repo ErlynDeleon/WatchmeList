@@ -121,6 +121,44 @@ public class HomeFrame extends JFrame implements ActionListener{
               });
             }
             else if(e.getSource() == removeButton){
+              if (mainPanel.getComponentCount() == 0) {
+                JOptionPane.showMessageDialog(null, "There are no movies to remove. Please add movies first.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; 
+            }
+            boolean anySelected = false;
+            for (Component component : mainPanel.getComponents()) {
+                if (component instanceof JPanel) {
+                    JPanel moviePanel = (JPanel) component;
+                    JCheckBox checkBox = (JCheckBox) moviePanel.getComponent(3);
+                    if (checkBox.isSelected()) {
+                        anySelected = true;
+                        break;
+                    }
+                }
+            }
+            if (!anySelected) {
+                JOptionPane.showMessageDialog(null, "Please select a movie to remove.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the selected movies?", "Confirmation", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                Component[] components = mainPanel.getComponents();
+                for (Component component : components) {
+                    if (component instanceof JPanel) {
+                        JPanel moviePanel = (JPanel) component;
+                        JCheckBox checkBox = (JCheckBox) moviePanel.getComponent(3);
+                        if (checkBox.isSelected()) {
+                            mainPanel.remove(moviePanel);
+                            String title = ((JLabel) moviePanel.getComponent(0)).getText().substring(7); 
+                            String genre = ((JLabel) moviePanel.getComponent(1)).getText().substring(7); 
+                            int releaseYear = Integer.parseInt(((JLabel) moviePanel.getComponent(2)).getText().substring(6)); 
+                            MovieList.getInstance().removeMovie(title, genre, releaseYear);
+                        }
+                    }
+                }
+                mainPanel.revalidate();
+                mainPanel.repaint();
+            }
             }
             else if(e.getSource() == updateButton){
               UpdateMovie update= new UpdateMovie();
@@ -137,9 +175,6 @@ public class HomeFrame extends JFrame implements ActionListener{
         JOptionPane.showMessageDialog(null, "Failed to save watchlist data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
-
-          
-            
             else if(e.getSource() == exitButton){
               ProgrammersProfileExit profileExit= new ProgrammersProfileExit();
               profileExit.setVisible(true);
