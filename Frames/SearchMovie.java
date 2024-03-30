@@ -10,8 +10,7 @@ public class SearchMovie extends JFrame{
     //frame settings
         add(label);
         setTitle("WatchmeList");
-        setSize(1100, 700);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(700, 500);
         setLocationRelativeTo(null);
         setResizable(false);
         setLayout(null);

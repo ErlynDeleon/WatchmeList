@@ -36,6 +36,7 @@ public class HomeFrame extends JFrame implements ActionListener{
         navigationPanel.setBackground(new Color(135, 133, 162));
         navigationPanel.setBounds(970, 0, 120, 700);
 
+        //navigation panel components
         //add button settings
         addButton.setBounds(32, 170, 50, 50);
         addButton.addActionListener(this);
@@ -65,6 +66,7 @@ public class HomeFrame extends JFrame implements ActionListener{
         menuBar.setBackground(new Color(255, 199, 199));
         menuBar.setBounds(0, 0, 970, 60);
 
+        //menu bar components
         //search text field settings
         searchTextField.setBounds(450, 10, 430, 40);
         menuBar.add(searchTextField);

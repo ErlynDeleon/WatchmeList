@@ -1,21 +1,95 @@
 package Frames;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
+import java.awt.*;
 
-public class AddMovie extends JFrame{
-  JLabel label = new JLabel();
+public class AddMovie extends JFrame {
+    JLabel label = new JLabel();
 
-  AddMovie(){
-    //frame settings
+    // title bar
+    JPanel titlePanel = new JPanel();
+    JLabel textLabel = new JLabel("ADD MOVIE");
+
+    // add section panel
+    GradientPanel addPanel = new GradientPanel(); 
+    JLabel titleLabel = new JLabel("Title: ");
+    JTextField titleTextField = new JTextField();
+
+    JLabel genreLabel = new JLabel("Genre: ");
+    JTextField genreTextField = new JTextField();
+
+    JLabel yearLabel = new JLabel("Year: ");
+    JTextField yearTextField = new JTextField();
+
+    JButton submitButton = new RoundButton("Submit");
+
+    AddMovie() {
+        // title bar settings
+        titlePanel.setBackground(new Color(255, 148, 148));
+        titlePanel.setBounds(0, 0, 700, 60);
+
+        //title text label 
+        textLabel.setBounds(355, 10, 200, 40);
+        textLabel.setForeground(new Color(255, 245, 228));
+        textLabel.setFont(new Font("Serif", Font.ITALIC, 40));
+        titlePanel.add(textLabel);
+
+        // add panel settings
+        addPanel.setBounds(0, 60, 700, 440);
+        addPanel.setLayout(null); 
+        addPanel.setOpaque(false); 
+
+        // add components to addPanel
+        titleLabel.setBounds(100, 30, 200, 100);
+        titleLabel.setForeground(new Color(255, 148, 148));
+        titleLabel.setFont(new Font("Serif", Font.PLAIN, 40));
+        titleTextField.setBounds(350, 60, 250, 40); 
+
+        genreLabel.setBounds(100, 130, 200, 100);
+        genreLabel.setForeground(new Color(255, 148, 148));
+        genreLabel.setFont(new Font("Serif", Font.PLAIN, 40));
+        genreTextField.setBounds(350, 160, 250, 40); 
+
+        yearLabel.setBounds(100, 230, 200, 100);
+        yearLabel.setForeground(new Color(255, 148, 148));
+        yearLabel.setFont(new Font("Serif", Font.PLAIN, 40));
+        yearTextField.setBounds(350, 260, 250, 40); 
+
+        submitButton.setBounds(290, 350, 100, 30); 
+
+        addPanel.add(titleLabel);
+        addPanel.add(titleTextField);
+        addPanel.add(genreLabel);
+        addPanel.add(genreTextField);
+        addPanel.add(yearLabel);
+        addPanel.add(yearTextField);
+        addPanel.add(submitButton);
+
+        // frame settings
         add(label);
         setTitle("WatchmeList");
-        setSize(1100, 700);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(700, 500);
         setLocationRelativeTo(null);
         setResizable(false);
         setLayout(null);
         setVisible(true);
-  }
+        add(titlePanel);
+        add(addPanel);
+    }
 
+    private static class GradientPanel extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            Color color1 = new Color(255, 209, 209);
+            Color color2 = new Color(255, 245, 228);
+
+            GradientPaint gradient = new GradientPaint(0, 0, color1, getWidth(), getHeight(), color2);
+            Graphics2D g2d = (Graphics2D) g;
+
+            g2d.setPaint(gradient);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+        }
+    }
 }
