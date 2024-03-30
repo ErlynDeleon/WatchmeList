@@ -120,9 +120,9 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
       } else if (e.getSource() == removeButton) {
           // Implement remove movie functionality
       } else if (e.getSource() == updateButton) {
-          UpdateMovie update = new UpdateMovie();
-          update.setVisible(true);
-          update.setLocationRelativeTo(null);
+          //UpdateMovie update = new UpdateMovie();
+         // update.setVisible(true);
+         // update.setLocationRelativeTo(null);
       } else if (e.getSource() == saveButton) {
           try {
               SaveButton saveButton = new SaveButton(this); // Instantiate the SaveButton class

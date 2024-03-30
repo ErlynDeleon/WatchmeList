@@ -2,6 +2,8 @@ package Frames;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -60,36 +62,44 @@ public class AddMovie extends JFrame {
         submitButton.setBounds(290, 350, 100, 30); 
         submitButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String title = titleTextField.getText();
-                String genre = genreTextField.getText();
-                String yearText = yearTextField.getText();
-        
-                if (title.isEmpty() || genre.isEmpty() || yearText.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Please fill out all fields.");
-                    titleTextField.setText("");
-                    genreTextField.setText("");
-                    yearTextField.setText("");
-                    return;
-                }
-        
-                int year;
-                try {
-                    year = Integer.parseInt(yearText);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Invalid year format. Please enter a valid year.");
-                    yearTextField.setText("");
-                    return; 
-                }
-        
-                Movie newMovie = new Movie(title, genre, year);
-        
-                MovieList.getInstance().addMovie(newMovie);
-        
-                JOptionPane.showMessageDialog(null, "Movie added successfully!");
-        
-                dispose();
+    public void actionPerformed(ActionEvent e) {
+        String title = titleTextField.getText();
+        String genre = genreTextField.getText();
+        String yearText = yearTextField.getText();
+
+        if (title.isEmpty() || genre.isEmpty() || yearText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill out all fields.");
+            titleTextField.setText("");
+            genreTextField.setText("");
+            yearTextField.setText("");
+            return;
+        }
+
+        int year;
+        try {
+            year = Integer.parseInt(yearText);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Invalid year format. Please enter a valid year.");
+            yearTextField.setText("");
+            return;
+        }
+
+        List<Movie> movies = MovieList.getInstance().getMovies();
+        for (Movie movie : movies) {
+            if (movie.getTitle().equalsIgnoreCase(title)) {
+                JOptionPane.showMessageDialog(null, "Movie with the same title already exists.");
+                return;
             }
+        }
+
+        Movie newMovie = new Movie(title, genre, year);
+
+        MovieList.getInstance().addMovie(newMovie);
+
+        JOptionPane.showMessageDialog(null, "Movie added successfully!");
+
+        dispose();
+    }
         });
 
         addPanel.add(titleLabel);
