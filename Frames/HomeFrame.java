@@ -125,8 +125,14 @@ public class HomeFrame extends JFrame implements ActionListener{
               update.setVisible(true);
               update.setLocationRelativeTo(null);
             }
-            else if(e.getSource() == saveButton){
-            }
+            else if(e.getSource() == saveButton) {
+              // Create an instance of SaveButton
+              SaveButton savePanel = new SaveButton();
+              // Show the panel in a dialog
+              JOptionPane.showMessageDialog(null, savePanel, "Saved", JOptionPane.INFORMATION_MESSAGE);
+          }
+          
+            
             else if(e.getSource() == exitButton){
               ProgrammersProfileExit profileExit= new ProgrammersProfileExit();
               profileExit.setVisible(true);
