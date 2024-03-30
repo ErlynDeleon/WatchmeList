@@ -27,6 +27,8 @@ public class UpdateMovie extends JFrame {
 
     boolean movieSelected = false;
 
+    MovieList movieList = MovieList.getInstance();
+
     UpdateMovie(String currentTitle, String currentGenre, String currentYear) {
         // Title bar settings
         titlePanel.setBackground(new Color(255, 148, 148));
@@ -82,11 +84,16 @@ public class UpdateMovie extends JFrame {
                     return;
                 }
 
-                // Update the movie (Implement this part according to your MovieList implementation)
-                // For example:
-                // movieList.updateMovie(currentTitle, newTitle, newGenre, newYear);
+                // Perform interpolation search to find the movie index
+                int index = movieList.interpolationSearch(currentTitle);
 
-                JOptionPane.showMessageDialog(null, "Movie updated successfully!");
+                if (index != -1) {
+                    // Update the movie
+                    movieList.updateMovie(index, newTitle, newGenre, newYear);
+                    JOptionPane.showMessageDialog(null, "Movie updated successfully!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Movie not found!");
+                }
             }
         });
 
