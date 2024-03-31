@@ -1,5 +1,4 @@
 package Frames;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,11 +7,9 @@ import java.awt.event.ActionListener;
 public class UpdateMovie extends JFrame {
     JLabel label = new JLabel();
 
-    // Title bar
     JPanel titlePanel = new JPanel();
     JLabel textLabel = new JLabel("UPDATE MOVIE");
 
-    // Update section panel
     GradientPanel updatePanel = new GradientPanel();
     JLabel titleLabel = new JLabel("Title: ");
     JTextField titleTextField = new JTextField();
@@ -25,27 +22,27 @@ public class UpdateMovie extends JFrame {
 
     JButton updateButton = new RoundButton("Update");
 
-    boolean movieSelected = false;
+    String currentTitle;
+    String currentGenre;
+    String currentYear;
 
-    MovieList movieList = MovieList.getInstance();
+    public UpdateMovie(String currentTitle, String currentGenre, String currentYear) {
+        this.currentTitle = currentTitle;
+        this.currentGenre = currentGenre;
+        this.currentYear = currentYear;
 
-    UpdateMovie(String currentTitle, String currentGenre, String currentYear) {
-        // Title bar settings
         titlePanel.setBackground(new Color(255, 148, 148));
         titlePanel.setBounds(0, 0, 700, 60);
 
-        // Title text label
         textLabel.setBounds(310, 10, 200, 40);
         textLabel.setForeground(new Color(255, 245, 228));
         textLabel.setFont(new Font("Serif", Font.ITALIC, 40));
         titlePanel.add(textLabel);
 
-        // Update panel settings
         updatePanel.setBounds(0, 60, 700, 440);
         updatePanel.setLayout(null);
         updatePanel.setOpaque(false);
 
-        // Add components to updatePanel
         titleLabel.setBounds(100, 30, 200, 100);
         titleLabel.setForeground(new Color(255, 148, 148));
         titleLabel.setFont(new Font("Serif", Font.PLAIN, 20));
@@ -65,37 +62,28 @@ public class UpdateMovie extends JFrame {
         yearTextField.setText(currentYear);
 
         updateButton.setBounds(290, 350, 120, 30);
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!movieSelected) {
-                    JOptionPane.showMessageDialog(null, "Please select a movie before updating.");
-                    return;
-                }
+        updateButton.setEnabled(true);
+       updateButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Get updated movie information
+        String newTitle = titleTextField.getText();
+        String newGenre = genreTextField.getText();
+        String newYear = yearTextField.getText();
 
-                // Get updated movie information
-                String newTitle = titleTextField.getText();
-                String newGenre = genreTextField.getText();
-                String newYear = yearTextField.getText();
+        // Validate if all fields are filled
+        if (newTitle.isEmpty() || newGenre.isEmpty() || newYear.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill out all fields.");
+            return;
+        }
 
-                // Validate if a movie is selected
-                if (newTitle.isEmpty() || newGenre.isEmpty() || newYear.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Please fill out all fields.");
-                    return;
-                }
+       // Update movie
+        MovieList.getInstance().updateMovie(currentTitle, currentGenre, Integer.parseInt(currentYear), newTitle, newGenre, Integer.parseInt(newYear));
 
-                // Perform interpolation search to find the movie index
-                int index = movieList.interpolationSearch(currentTitle);
-
-                if (index != -1) {
-                    // Update the movie
-                    movieList.updateMovie(index, newTitle, newGenre, newYear);
-                    JOptionPane.showMessageDialog(null, "Movie updated successfully!");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Movie not found!");
-                }
-            }
-        });
+        // Close the update window
+        dispose();
+    }
+});
 
         updatePanel.add(titleLabel);
         updatePanel.add(titleTextField);
@@ -105,15 +93,12 @@ public class UpdateMovie extends JFrame {
         updatePanel.add(yearTextField);
         updatePanel.add(updateButton);
 
-        // Frame settings
         add(label);
         setTitle("WatchmeList");
         setSize(700, 500);
         setLocationRelativeTo(null);
         setResizable(false);
         setLayout(null);
-        ImageIcon icon = new ImageIcon("Frames\\pictures\\photo_2024-03-30_23-39-13.jpg");
-        setIconImage(icon.getImage());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
         add(titlePanel);
@@ -134,10 +119,5 @@ public class UpdateMovie extends JFrame {
             g2d.setPaint(gradient);
             g2d.fillRect(0, 0, getWidth(), getHeight());
         }
-    }
-
-    // Method to set movieSelected flag
-    public void setNewMovie(boolean selected) {
-        this.movieSelected = selected;
     }
 }
