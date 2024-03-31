@@ -172,7 +172,6 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
         int selectedCount = 0; // Bilang ng mga naka-select na checkboxes
         Component selectedComponent = null; // Component na naka-select
 
-        // Hanapin ang pelikula na naka-select
         for (Component component : mainPanel.getComponents()) {
             if (component instanceof JPanel) {
                 JPanel moviePanel = (JPanel) component;
@@ -188,23 +187,22 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
             }
         }
 
-        // Kapag walang naka-select na pelikula
+        // Kapag walang naka-select na movie
         if (selectedCount == 0) {
             JOptionPane.showMessageDialog(null, "Please select a movie to update.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Kumuha ng impormasyon ng pelikula na naka-select
+      
         String selectedTitle = ((JLabel) ((JPanel) selectedComponent).getComponent(0)).getText().substring(7);
         String selectedGenre = ((JLabel) ((JPanel) selectedComponent).getComponent(1)).getText().substring(7);
         String selectedYear = ((JLabel) ((JPanel) selectedComponent).getComponent(2)).getText().substring(6);
 
-        // Buo ng UpdateMovie frame na may default na impormasyon ng pelikula
         UpdateMovie update = new UpdateMovie(selectedTitle, selectedGenre, selectedYear);
         update.setVisible(true);
         update.setLocationRelativeTo(null);
 
-        // Magdagdag ng WindowListener para ma-refresh ang display ng pelikula sa HomeFrame
+        // Magdagdag ng WindowListener para ma-refresh ang display ng movie sa HomeFrame
         update.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
