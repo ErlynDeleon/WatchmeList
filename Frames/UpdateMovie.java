@@ -77,8 +77,11 @@ public class UpdateMovie extends JFrame {
             return;
         }
 
-       // Update movie
+        // Update movie
         MovieList.getInstance().updateMovie(currentTitle, currentGenre, Integer.parseInt(currentYear), newTitle, newGenre, Integer.parseInt(newYear));
+
+        // Show confirmation message
+        JOptionPane.showMessageDialog(null, "Movie updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
 
         // Close the update window
         dispose();
