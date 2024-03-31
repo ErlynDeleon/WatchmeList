@@ -2,12 +2,13 @@ package Frames;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class CircleButton extends JButton {
     private Color backgroundColor;
     private Color foregroundColor;
+    private Color hoverColor;
     private Image iconImage;
 
     public CircleButton() {
@@ -41,12 +42,26 @@ public class CircleButton extends JButton {
         setContentAreaFilled(false);
         setFocusPainted(false);
         setBorderPainted(false);
-        setBackground(Color.WHITE); 
-        setForeground(Color.BLACK); 
+        setBackground(new Color(246, 246, 246)); 
+        setForeground(Color.BLACK);
+        hoverColor = new Color(255, 192, 203); 
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setBackground(hoverColor);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setBackground(new Color(246, 246, 246)); 
+            }
+        });
     }
 
     public void setBackgroundColor(Color color) {
         this.backgroundColor = color;
+        setBackground(color);
     }
 
     public void setForegroundColor(Color color) {
@@ -55,22 +70,25 @@ public class CircleButton extends JButton {
 
     @Override
     protected void paintComponent(Graphics g) {
-        if (getModel().isArmed()) {
-            g.setColor(backgroundColor != null ? backgroundColor.brighter() : getBackground().brighter());
-        } else {
-            g.setColor(backgroundColor != null ? backgroundColor : getBackground());
-        }
         Graphics2D g2d = (Graphics2D) g.create();
+
+        int width = getWidth() - 1;
+        int height = getHeight() - 1;
+
+        g2d.setColor(getBackground());
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.fillOval(0, 0, getWidth() - 1, getHeight() - 1);
+        g2d.fillOval(0, 0, width, height);
+
         super.paintComponent(g);
+
         if (iconImage != null) {
-            int iconWidth = Math.min(iconImage.getWidth(this), getWidth() - 6); 
-            int iconHeight = Math.min(iconImage.getHeight(this), getHeight() - 6); 
-            int x = (getWidth() - iconWidth) / 2;
-            int y = (getHeight() - iconHeight) / 2;
+            int iconWidth = Math.min(iconImage.getWidth(this), width - 6);
+            int iconHeight = Math.min(iconImage.getHeight(this), height - 6);
+            int x = (width - iconWidth) / 2;
+            int y = (height - iconHeight) / 2;
             g.drawImage(iconImage, x, y, iconWidth, iconHeight, this);
         }
+
         g2d.dispose();
     }
 
@@ -85,16 +103,16 @@ public class CircleButton extends JButton {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(50, 50); 
+        return new Dimension(50, 50);
     }
 
     @Override
     public Dimension getMinimumSize() {
-        return new Dimension(50, 50); 
+        return new Dimension(50, 50);
     }
 
     @Override
     public Dimension getMaximumSize() {
-        return new Dimension(50, 50); 
+        return new Dimension(50, 50);
     }
 }

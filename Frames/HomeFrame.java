@@ -168,12 +168,48 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
                 mainPanel.repaint();
             }
         } 
-        
-        else if (e.getSource() == updateButton) {
-            // UpdateMovie update = new UpdateMovie();
-            // update.setVisible(true);
-            // update.setLocationRelativeTo(null);
-        } 
+     else if (e.getSource() == updateButton) {
+        int selectedCount = 0; // Bilang ng mga naka-select na checkboxes
+        Component selectedComponent = null; // Component na naka-select
+
+        for (Component component : mainPanel.getComponents()) {
+            if (component instanceof JPanel) {
+                JPanel moviePanel = (JPanel) component;
+                JCheckBox checkBox = (JCheckBox) moviePanel.getComponent(3);
+                if (checkBox.isSelected()) {
+                    selectedCount++;
+                    selectedComponent = component;
+                    if (selectedCount > 1) {
+                        JOptionPane.showMessageDialog(null, "Please select only one movie to update.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Kapag walang naka-select na movie
+        if (selectedCount == 0) {
+            JOptionPane.showMessageDialog(null, "Please select a movie to update.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+      
+        String selectedTitle = ((JLabel) ((JPanel) selectedComponent).getComponent(0)).getText().substring(7);
+        String selectedGenre = ((JLabel) ((JPanel) selectedComponent).getComponent(1)).getText().substring(7);
+        String selectedYear = ((JLabel) ((JPanel) selectedComponent).getComponent(2)).getText().substring(6);
+
+        UpdateMovie update = new UpdateMovie(selectedTitle, selectedGenre, selectedYear);
+        update.setVisible(true);
+        update.setLocationRelativeTo(null);
+
+        // Magdagdag ng WindowListener para ma-refresh ang display ng movie sa HomeFrame
+        update.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                displayMovies(); // Refresh the display after updating
+            }
+        });
+    } 
         
         else if (e.getSource() == saveButton) {
             try {
