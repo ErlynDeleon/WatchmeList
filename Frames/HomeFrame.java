@@ -170,10 +170,37 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
         } 
         
         else if (e.getSource() == updateButton) {
-            // UpdateMovie update = new UpdateMovie();
-            // update.setVisible(true);
-            // update.setLocationRelativeTo(null);
-        } 
+            if (mainPanel.getComponentCount() == 0) {
+                JOptionPane.showMessageDialog(null, "There are no movies to update. Please add movies first.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            boolean anySelected = false;
+            for (Component component : mainPanel.getComponents()) {
+                if (component instanceof JPanel) {
+                    JPanel moviePanel = (JPanel) component;
+                    JCheckBox checkBox = (JCheckBox) moviePanel.getComponent(3);
+                    if (checkBox.isSelected()) {
+                        anySelected = true;
+                        String title = ((JLabel) moviePanel.getComponent(0)).getText().substring(7);
+                        String genre = ((JLabel) moviePanel.getComponent(1)).getText().substring(7);
+                        String year = ((JLabel) moviePanel.getComponent(2)).getText().substring(6);
+                        UpdateMovie update = new UpdateMovie(title, genre, year);
+                        update.setVisible(true);
+                        update.setLocationRelativeTo(null);
+                        update.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                displayMovies(); // Refresh the display after updating
+                            }
+                        });
+                        break; // Stop after finding the first selected movie
+                    }
+                }
+            }
+            if (!anySelected) {
+                JOptionPane.showMessageDialog(null, "Please select a movie to update.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
         
         else if (e.getSource() == saveButton) {
             try {
