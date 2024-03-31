@@ -126,7 +126,9 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
                     displayMovies();
                 }
             });
-        } else if (e.getSource() == removeButton) {
+        } 
+        
+        else if (e.getSource() == removeButton) {
             if (mainPanel.getComponentCount() == 0) {
                 JOptionPane.showMessageDialog(null, "There are no movies to remove. Please add movies first.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -165,19 +167,25 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
                 mainPanel.revalidate();
                 mainPanel.repaint();
             }
-        } else if (e.getSource() == updateButton) {
-           // UpdateMovie update = new UpdateMovie();
-           // update.setVisible(true);
-           // update.setLocationRelativeTo(null);
-        } else if (e.getSource() == saveButton) {
+        } 
+        
+        else if (e.getSource() == updateButton) {
+            // UpdateMovie update = new UpdateMovie();
+            // update.setVisible(true);
+            // update.setLocationRelativeTo(null);
+        } 
+        
+        else if (e.getSource() == saveButton) {
             try {
-                SaveButton saveButton = new SaveButton(this); 
+                SaveButton saveButton = new SaveButton(this);
                 saveButton.saveWatchlistToFile();
                 JOptionPane.showMessageDialog(null, "Watchlist data saved successfully.", "Saved", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Failed to save watchlist data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } else if (e.getSource() == exitButton) {
+        } 
+        
+        else if (e.getSource() == exitButton) {
             ProgrammersProfileExit profileExit = new ProgrammersProfileExit();
             profileExit.setVisible(true);
             profileExit.setLocationRelativeTo(null);
@@ -185,9 +193,34 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
         }
         // For menu bar button
         else if (e.getSource() == searchButton) {
-            SearchMovie searchMovie = new SearchMovie();
-            searchMovie.setVisible(true);
-            searchMovie.setLocationRelativeTo(null);
+            String searchText = searchTextField.getText().trim().toLowerCase();
+            if (searchText.isEmpty()) {
+                new SearchMovie(null, "Please enter a title, genre, or year to search.").setVisible(true);
+                return;
+            }
+
+            List<Movie> searchResults = new ArrayList<>();
+
+            if (searchText.matches("\\d+")) {
+                int releaseYear = Integer.parseInt(searchText);
+                Movie movie = MovieList.getInstance().searchMovieByReleaseYear(releaseYear);
+                if (movie != null) {
+                    searchResults.add(movie);
+                }
+            } else {
+                for (Movie movie : MovieList.getInstance().getMovies()) {
+                    if (movie.getTitle().toLowerCase().contains(searchText) ||
+                            movie.getGenre().toLowerCase().contains(searchText)) {
+                        searchResults.add(movie);
+                    }
+                }
+            }
+
+            if (searchResults.isEmpty()) {
+                new SearchMovie(null, "No movies found matching the search criteria.").setVisible(true);
+            } else {
+                new SearchMovie(searchResults, null).setVisible(true);
+            }
         }
     }
 
@@ -195,36 +228,36 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
         mainPanel.removeAll();
 
         List<Movie> movies = MovieList.getInstance().getMovies();
-    
+
         mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 33, 40));
-    
-        int count = 0; 
-    
+
+        int count = 0;
+
         for (Movie movie : movies) {
             if (count >= 12) {
                 JOptionPane.showMessageDialog(null, "We apologize, but the program cannot handle more than 12 movies at once. Please remove a movie to add another one.", "Limit Exceeded", JOptionPane.ERROR_MESSAGE);
-                break; 
+                break;
             }
-    
+
             JPanel moviePanel = new JPanel(new GridLayout(4, 1));
             moviePanel.setBackground(new Color(255, 199, 199));
             moviePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-    
+
             JLabel titleLabel = new JLabel("Title: " + movie.getTitle());
             JLabel genreLabel = new JLabel("Genre: " + movie.getGenre());
             JLabel yearLabel = new JLabel("Year: " + movie.getReleaseYear());
-    
+
             JCheckBox checkBox = new JCheckBox();
-    
+
             moviePanel.setPreferredSize(new Dimension(200, 150));
-    
+
             moviePanel.add(titleLabel);
             moviePanel.add(genreLabel);
             moviePanel.add(yearLabel);
             moviePanel.add(checkBox);
-    
+
             mainPanel.add(moviePanel);
-            count++; 
+            count++;
         }
         mainPanel.revalidate();
         mainPanel.repaint();

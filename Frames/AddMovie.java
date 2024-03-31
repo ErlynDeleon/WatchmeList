@@ -15,7 +15,7 @@ public class AddMovie extends JFrame {
     JLabel textLabel = new JLabel("ADD MOVIE");
 
     // add section panel
-    GradientPanel addPanel = new GradientPanel(); 
+    GradientPanel addPanel = new GradientPanel();
     JLabel titleLabel = new JLabel("Title: ");
     JTextField titleTextField = new JTextField();
 
@@ -40,66 +40,66 @@ public class AddMovie extends JFrame {
 
         // add panel settings
         addPanel.setBounds(0, 60, 700, 440);
-        addPanel.setLayout(null); 
-        addPanel.setOpaque(false); 
+        addPanel.setLayout(null);
+        addPanel.setOpaque(false);
 
         // add components to addPanel
         titleLabel.setBounds(100, 30, 200, 100);
         titleLabel.setForeground(new Color(255, 148, 148));
         titleLabel.setFont(new Font("Serif", Font.PLAIN, 40));
-        titleTextField.setBounds(350, 60, 250, 40); 
+        titleTextField.setBounds(350, 60, 250, 40);
 
         genreLabel.setBounds(100, 130, 200, 100);
         genreLabel.setForeground(new Color(255, 148, 148));
         genreLabel.setFont(new Font("Serif", Font.PLAIN, 40));
-        genreTextField.setBounds(350, 160, 250, 40); 
+        genreTextField.setBounds(350, 160, 250, 40);
 
         yearLabel.setBounds(100, 230, 200, 100);
         yearLabel.setForeground(new Color(255, 148, 148));
         yearLabel.setFont(new Font("Serif", Font.PLAIN, 40));
-        yearTextField.setBounds(350, 260, 250, 40); 
+        yearTextField.setBounds(350, 260, 250, 40);
 
-        submitButton.setBounds(290, 350, 100, 30); 
+        submitButton.setBounds(290, 350, 100, 30);
         submitButton.addActionListener(new ActionListener() {
             @Override
-    public void actionPerformed(ActionEvent e) {
-        String title = titleTextField.getText();
-        String genre = genreTextField.getText();
-        String yearText = yearTextField.getText();
+            public void actionPerformed(ActionEvent e) {
+                String title = titleTextField.getText();
+                String genre = genreTextField.getText();
+                String yearText = yearTextField.getText();
 
-        if (title.isEmpty() || genre.isEmpty() || yearText.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill out all fields.");
-            titleTextField.setText("");
-            genreTextField.setText("");
-            yearTextField.setText("");
-            return;
-        }
+                if (title.isEmpty() || genre.isEmpty() || yearText.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please fill out all fields.");
+                    titleTextField.setText("");
+                    genreTextField.setText("");
+                    yearTextField.setText("");
+                    return;
+                }
 
-        int year;
-        try {
-            year = Integer.parseInt(yearText);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Invalid year format. Please enter a valid year.");
-            yearTextField.setText("");
-            return;
-        }
+                int year;
+                try {
+                    year = Integer.parseInt(yearText);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Invalid year format. Please enter a valid year.");
+                    yearTextField.setText("");
+                    return;
+                }
 
-        List<Movie> movies = MovieList.getInstance().getMovies();
-        for (Movie movie : movies) {
-            if (movie.getTitle().equalsIgnoreCase(title)) {
-                JOptionPane.showMessageDialog(null, "Movie with the same title already exists.");
-                return;
+                List<Movie> movies = MovieList.getInstance().getMovies();
+                for (Movie movie : movies) {
+                    if (movie.getTitle().equalsIgnoreCase(title)) {
+                        JOptionPane.showMessageDialog(null, "Movie with the same title already exists.");
+                        return;
+                    }
+                }
+
+                Movie newMovie = new Movie(title, genre, year);
+
+                MovieList.getInstance().addMovie(newMovie);
+
+                JOptionPane.showMessageDialog(null, "Movie added successfully!");
+
+                dispose();
             }
-        }
-
-        Movie newMovie = new Movie(title, genre, year);
-
-        MovieList.getInstance().addMovie(newMovie);
-
-        JOptionPane.showMessageDialog(null, "Movie added successfully!");
-
-        dispose();
-    }
         });
 
         addPanel.add(titleLabel);

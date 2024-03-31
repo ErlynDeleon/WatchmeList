@@ -14,23 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 
-public class ProgrammersProfileExit extends JFrame implements ActionListener{
+public class ProgrammersProfileExit extends JFrame implements ActionListener {
     JLabel label = new JLabel();
 
-    //title panel
+    // title panel
     JLabel titleText = new JLabel("PROGRAMMERS");
     JPanel titlePanel = new JPanel();
 
-    //main panel
-    JPanel mainPanel = new JPanel(new GridLayout(2, 2));    
+    // main panel
+    JPanel mainPanel = new JPanel(new GridLayout(2, 2));
     static List<Programmers> programmers = new ArrayList<>();
 
-    //button exit panel
+    // button exit panel
     JPanel exitPanel = new JPanel();
     JButton exitButton = new JButton("Exit");
 
     ProgrammersProfileExit() {
-        //title panel
+        // title panel
         titlePanel.setVisible(true);
         titlePanel.setBounds(0, 0, 800, 80);
         titlePanel.setBackground(new Color(226, 110, 229));
@@ -41,19 +41,19 @@ public class ProgrammersProfileExit extends JFrame implements ActionListener{
         titleText.setFont(new Font("Monospaced", Font.BOLD, 50));
         titlePanel.add(titleText);
 
-        //mainPanel
-        mainPanel.setBounds(0, 80, 800, 900); 
+        // mainPanel
+        mainPanel.setBounds(0, 80, 800, 900);
         mainPanel.setLayout(null);
 
         int panelWidth = 340;
-        int panelHeight = 170; 
+        int panelHeight = 170;
         int gap = 20;
         int startX = 50;
         int startY = 40;
 
         for (Programmers programmer : programmers) {
             JPanel programmerPanel = new JPanel(new GridLayout(1, 2));
-            programmerPanel.setBackground(new Color(255,181,235));
+            programmerPanel.setBackground(new Color(255, 181, 235));
             programmerPanel.setBounds(startX, startY, panelWidth, panelHeight);
             mainPanel.add(programmerPanel);
 
@@ -61,49 +61,49 @@ public class ProgrammersProfileExit extends JFrame implements ActionListener{
             JPanel picturePanel = new JPanel();
             picturePanel.setLayout(null);
             picturePanel.setBounds(0, 0, panelWidth, panelHeight);
-            picturePanel.setBackground(new Color(255,171,171)); 
+            picturePanel.setBackground(new Color(255, 171, 171));
             programmerPanel.add(picturePanel);
 
             ImageIcon imageIcon = new ImageIcon(programmer.imagePath);
-            Image image = imageIcon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH); 
+            Image image = imageIcon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH);
             ImageIcon scaledImageIcon = new ImageIcon(image);
 
             JLabel pictureLabel = new JLabel(scaledImageIcon);
-            pictureLabel.setBounds(15, 10, 140, 140); 
+            pictureLabel.setBounds(15, 10, 140, 140);
             picturePanel.add(pictureLabel);
 
             // Name and Role Panel
             JPanel nameRolePanel = new JPanel();
-            nameRolePanel.setLayout(null); 
+            nameRolePanel.setLayout(null);
             nameRolePanel.setBounds(panelWidth / 2, 0, panelWidth / 2, panelHeight);
-            nameRolePanel.setBackground(new Color(255,171,171));
+            nameRolePanel.setBackground(new Color(255, 171, 171));
             programmerPanel.add(nameRolePanel);
 
             JLabel nameLabel = new JLabel(programmer.fullName);
             nameLabel.setForeground(Color.BLACK);
             nameLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
-            nameLabel.setBounds(10, 10, panelWidth / 2 - 20, 30); 
+            nameLabel.setBounds(10, 10, panelWidth / 2 - 20, 30);
             nameRolePanel.add(nameLabel);
 
-            String[] roles = programmer.role.split(", "); 
+            String[] roles = programmer.role.split(", ");
 
             // Main Role Label
-            JLabel mainRoleLabel = new JLabel(roles[0]); 
+            JLabel mainRoleLabel = new JLabel(roles[0]);
             mainRoleLabel.setForeground(Color.BLACK);
             mainRoleLabel.setFont(new Font("Monospaced", Font.PLAIN, 16));
-            mainRoleLabel.setBounds(10, 60, panelWidth / 2 - 20, 20); 
+            mainRoleLabel.setBounds(10, 60, panelWidth / 2 - 20, 20);
             nameRolePanel.add(mainRoleLabel);
 
             // Secondary Role Label
-            if (roles.length > 1) { 
-                JLabel secondaryRoleLabel = new JLabel(roles[1]); 
+            if (roles.length > 1) {
+                JLabel secondaryRoleLabel = new JLabel(roles[1]);
                 secondaryRoleLabel.setForeground(Color.BLACK);
                 secondaryRoleLabel.setFont(new Font("Monospaced", Font.PLAIN, 16));
-                secondaryRoleLabel.setBounds(10, 90, panelWidth / 2 - 20, 20); 
+                secondaryRoleLabel.setBounds(10, 90, panelWidth / 2 - 20, 20);
                 nameRolePanel.add(secondaryRoleLabel);
             }
 
-          startY += panelHeight + gap;
+            startY += panelHeight + gap;
         }
 
         exitPanel.setBounds(0, 820, 800, 70);
@@ -119,7 +119,7 @@ public class ProgrammersProfileExit extends JFrame implements ActionListener{
 
         int buttonX = (exitPanel.getWidth() - buttonSize.width) / 2;
         int buttonY = (exitPanel.getHeight() - buttonSize.height) / 2;
-        
+
         exitButton.setBounds(buttonX, buttonY, buttonSize.width, buttonSize.height);
         exitButton.addActionListener(this);
         exitPanel.add(exitButton);
@@ -131,8 +131,8 @@ public class ProgrammersProfileExit extends JFrame implements ActionListener{
                 Graphics2D g2d = (Graphics2D) g;
 
                 // Define gradient colors
-                Color color1 = new Color(239,51,177); // #EF33B1
-                Color color2 = new Color(246,230,188);  // #F6E6BC 
+                Color color1 = new Color(239, 51, 177); // #EF33B1
+                Color color2 = new Color(246, 230, 188); // #F6E6BC
 
                 // Create gradient paint
                 GradientPaint gradient = new GradientPaint(
@@ -184,9 +184,10 @@ public class ProgrammersProfileExit extends JFrame implements ActionListener{
 
     static {
         programmers.add(new Programmers("Frames\\pictures\\jhoana.jpeg", "Jhoana Decarla Barrameda", "Tester"));
-        programmers.add(new Programmers("Frames\\pictures\\erlyn.jpeg", "Erlyn Queen De Leon","Project and Layout Manager"));
+        programmers.add(
+                new Programmers("Frames\\pictures\\erlyn.jpeg", "Erlyn Queen De Leon", "Project and Layout Manager"));
         programmers.add(new Programmers("Frames\\pictures\\lyrine.jpeg", "Lyrine Poliarco", "Researcher"));
         programmers.add(new Programmers("Frames\\pictures\\angelica.jpeg", "Angelica Toquero", "Debugger"));
     }
-    
+
 }
