@@ -149,8 +149,8 @@ public class ProgrammersProfileExit extends JFrame implements ActionListener{
     }
 
     static {
-        programmers.add(new Programmers("Frames\\pictures\\jhoana.jpeg", "Jhoana Decarla Barrameda", "Technical Writer, Algorithm Developer for No. 4"));
-        programmers.add(new Programmers("Frames\\pictures\\erlyn.jpeg", "Erlyn Queen De Leon","Project and Layout Manager, Algorithm Developer for No. 1"));
+        programmers.add(new Programmers("Frames\\pictures\\jhoana.jpeg", "Jhoana Decarla Barrameda", ""));
+        programmers.add(new Programmers("Frames\\pictures\\erlyn.jpeg", "Erlyn Queen De Leon",""));
         programmers.add(new Programmers("Frames\\pictures\\lyrine.jpeg", "Lyrine Poliarco", "Researcher, Algorithm Developer for No. 2"));
         programmers.add(new Programmers("Frames\\pictures\\angelica.jpeg", "Angelica Toquero", "Tester, Algorithm Developer for No. 3"));
     }
