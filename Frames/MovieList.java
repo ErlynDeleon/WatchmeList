@@ -19,6 +19,7 @@ public class MovieList {
         }
         return instance;
     }
+    
 
     public void addMovie(Movie movie) {
         movies.add(movie);
@@ -27,6 +28,19 @@ public class MovieList {
     public List<Movie> getMovies() {
         return movies;
     }
+
+   // Method para sa pag-update sa movie
+public void updateMovie(String currentTitle, String currentGenre, int currentYear, String newTitle, String newGenre, int newYear) {
+    for (Movie movie : movies) {
+        if (movie.getTitle().equals(currentTitle) && movie.getGenre().equals(currentGenre) && movie.getReleaseYear() == currentYear) {
+            movie.setTitle(newTitle);
+            movie.setGenre(newGenre);
+            movie.setReleaseYear(newYear);
+            break;
+        }
+    }
+}
+
 
     public void removeMovie(String title, String genre, int releaseYear) {
         movies.removeIf(movie ->
