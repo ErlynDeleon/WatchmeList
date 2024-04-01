@@ -19,6 +19,11 @@ public class MovieList {
         }
         return instance;
     }
+    public boolean isModified() {
+    
+        return !movies.isEmpty();
+    }
+    
 
     public void addMovie(Movie movie) {
         movies.add(movie);
@@ -27,6 +32,7 @@ public class MovieList {
     public List<Movie> getMovies() {
         return movies;
     }
+    
 
     public void updateMovie(String currentTitle, String currentGenre, int currentYear, String newTitle, String newGenre, int newYear) {
         for (Movie movie : movies) {

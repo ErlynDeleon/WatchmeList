@@ -42,6 +42,19 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
 
     // For main panel
     JPanel mainPanel = new JPanel(null);
+    private boolean modified = false;
+
+    // Other code...
+
+    // Method to set the modified flag
+    public void setModified(boolean modified) {
+        this.modified = modified;
+    }
+
+    // Method to check if any changes have been made
+    public boolean isModified() {
+        return modified;
+    }
 
     HomeFrame() {
         // Navigation panel settings
@@ -115,6 +128,7 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
     public void actionPerformed(ActionEvent e) {
         // For navigation buttons
         if (e.getSource() == addButton) {
+            setModified(true);
             AddMovie add = new AddMovie();
             add.setVisible(true);
             add.setLocationRelativeTo(null);
@@ -128,6 +142,7 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
         } 
         
         else if (e.getSource() == removeButton) {
+            setModified(true);
             if (mainPanel.getComponentCount() == 0) {
                 JOptionPane.showMessageDialog(null, "There are no movies to remove. Please add movies first.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -168,6 +183,7 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
             }
         } 
      else if (e.getSource() == updateButton) {
+        setModified(true);
         int selectedCount = 0; // Bilang ng mga naka-select na checkboxes
         Component selectedComponent = null; // Component na naka-select
 
@@ -211,9 +227,14 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
     } 
         
         else if (e.getSource() == saveButton) {
+            if (!isModified()) {
+                JOptionPane.showMessageDialog(null, "Nothing new to be saved.", "Information", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             try {
                 SaveButton saveButton = new SaveButton(this);
                 saveButton.saveWatchlistToFile();
+                setModified(false);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Failed to save watchlist data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
