@@ -19,7 +19,6 @@ public class MovieList {
         }
         return instance;
     }
-    
 
     public void addMovie(Movie movie) {
         movies.add(movie);
@@ -29,18 +28,16 @@ public class MovieList {
         return movies;
     }
 
-   // Method para sa pag-update sa movie
-public void updateMovie(String currentTitle, String currentGenre, int currentYear, String newTitle, String newGenre, int newYear) {
-    for (Movie movie : movies) {
-        if (movie.getTitle().equals(currentTitle) && movie.getGenre().equals(currentGenre) && movie.getReleaseYear() == currentYear) {
-            movie.setTitle(newTitle);
-            movie.setGenre(newGenre);
-            movie.setReleaseYear(newYear);
-            break;
+    public void updateMovie(String currentTitle, String currentGenre, int currentYear, String newTitle, String newGenre, int newYear) {
+        for (Movie movie : movies) {
+            if (movie.getTitle().equals(currentTitle) && movie.getGenre().equals(currentGenre) && movie.getReleaseYear() == currentYear) {
+                movie.setTitle(newTitle);
+                movie.setGenre(newGenre);
+                movie.setReleaseYear(newYear);
+                break;
+            }
         }
     }
-}
-
 
     public void removeMovie(String title, String genre, int releaseYear) {
         movies.removeIf(movie ->
@@ -51,6 +48,7 @@ public void updateMovie(String currentTitle, String currentGenre, int currentYea
     }
 
     public Movie searchMovieByTitle(String title) {
+        sortMovies();
         int lo = 0;
         int hi = movies.size() - 1;
 
@@ -68,6 +66,10 @@ public void updateMovie(String currentTitle, String currentGenre, int currentYea
             }
         }
         return null;
+    }
+
+    public void sortMovies() {
+        Collections.sort(movies, Comparator.comparing(Movie::getTitle));
     }
 
     public Movie searchMovieByGenre(String genre) {
@@ -90,39 +92,46 @@ public void updateMovie(String currentTitle, String currentGenre, int currentYea
         return null;
     }
 
-    public Movie searchMovieByReleaseYear(int releaseYear) {
+    public List<Movie> searchMovieByReleaseYear(int releaseYear) {
+        List<Movie> results = new ArrayList<>();
+    
         Collections.sort(movies, Comparator.comparingInt(Movie::getReleaseYear));
-
-        int lo = 0;
-        int hi = movies.size() - 1;
-
-        if (movies.isEmpty()) {
-            return null;
-        }
-
-        if (releaseYear < movies.get(0).getReleaseYear() || releaseYear > movies.get(hi).getReleaseYear()) {
-            return null;
-        }
-
-        while (lo <= hi && releaseYear >= movies.get(lo).getReleaseYear() && releaseYear <= movies.get(hi).getReleaseYear()) {
-            int yearRange = movies.get(hi).getReleaseYear() - movies.get(lo).getReleaseYear();
-
-            if (yearRange == 0) {
-                return movies.get(lo);
-            }
-
-            int pos = lo + ((hi - lo) / yearRange) * (releaseYear - movies.get(lo).getReleaseYear());
-
+    
+        int low = 0;
+        int high = movies.size() - 1;
+    
+        while (low <= high && releaseYear >= movies.get(low).getReleaseYear() && releaseYear <= movies.get(high).getReleaseYear()) {
+            // Calculate the position using interpolation formula
+            int pos = low + ((releaseYear - movies.get(low).getReleaseYear()) * (high - low) / (movies.get(high).getReleaseYear() - movies.get(low).getReleaseYear()));
+    
             if (movies.get(pos).getReleaseYear() == releaseYear) {
-                return movies.get(pos);
+                // If the movie at pos matches the release year, include it in the results
+                results.add(movies.get(pos));
+    
+                // Check for other movies with the same release year towards the left
+                int left = pos - 1;
+                while (left >= low && movies.get(left).getReleaseYear() == releaseYear) {
+                    results.add(movies.get(left));
+                    left--;
+                }
+    
+                // Check for other movies with the same release year towards the right
+                int right = pos + 1;
+                while (right <= high && movies.get(right).getReleaseYear() == releaseYear) {
+                    results.add(movies.get(right));
+                    right++;
+                }
+    
+                return results;
             }
-
+    
             if (movies.get(pos).getReleaseYear() < releaseYear) {
-                lo = pos + 1;
+                low = pos + 1;
             } else {
-                hi = pos - 1;
+                high = pos - 1;
             }
         }
-        return null;
+    
+        return results;
     }
-}
+}    

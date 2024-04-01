@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.util.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.text.*;
 import java.awt.event.ActionEvent;
@@ -215,7 +214,6 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
             try {
                 SaveButton saveButton = new SaveButton(this);
                 saveButton.saveWatchlistToFile();
-                JOptionPane.showMessageDialog(null, "Watchlist data saved successfully.", "Saved", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Failed to save watchlist data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -235,70 +233,81 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
                 return;
             }
 
-            List<Movie> searchResults = new ArrayList<>();
+            // Initialize the search results list
+List<Movie> searchResults = new ArrayList<>();
 
-            if (searchText.matches("\\d+")) {
-                int releaseYear = Integer.parseInt(searchText);
-                Movie movie = MovieList.getInstance().searchMovieByReleaseYear(releaseYear);
-                if (movie != null) {
-                    searchResults.add(movie);
-                }
-            } else {
-                for (Movie movie : MovieList.getInstance().getMovies()) {
-                    if (movie.getTitle().toLowerCase().contains(searchText) ||
-                            movie.getGenre().toLowerCase().contains(searchText)) {
-                        searchResults.add(movie);
-                    }
-                }
-            }
+// Convert the search text to lowercase for case-insensitive matching
+String searchTextLowerCase = searchText.toLowerCase();
 
-            if (searchResults.isEmpty()) {
-                new SearchMovie(null, "No movies found matching the search criteria.").setVisible(true);
-            } else {
-                new SearchMovie(searchResults, null).setVisible(true);
-            }
+if (searchText.matches("\\d+")) {
+    // If the search text contains only digits, search for movies by release year
+    int releaseYear = Integer.parseInt(searchText);
+    // Use the updated search method to get all movies with the specified release year
+    searchResults.addAll(MovieList.getInstance().searchMovieByReleaseYear(releaseYear));
+
+} else {
+    // Search for movies whose title or genre contains the entered text
+    for (Movie movie : MovieList.getInstance().getMovies()) {
+        // Check if the movie title or genre contains the search text
+        if (movie.getTitle().toLowerCase().contains(searchTextLowerCase) ||
+                movie.getGenre().toLowerCase().contains(searchTextLowerCase)) {
+            searchResults.add(movie);
         }
     }
+}
 
+// Sort the search results alphabetically by title
+searchResults.sort(Comparator.comparing(Movie::getTitle, String.CASE_INSENSITIVE_ORDER));
+
+// Display search results
+if (searchResults.isEmpty()) {
+    new SearchMovie(null, "No movies found matching the search criteria.").setVisible(true);
+} else {
+    new SearchMovie(searchResults, null).setVisible(true);
+}
+
+        }
+    }
     private void displayMovies() {
         mainPanel.removeAll();
-
+    
+        // Sort the movies alphabetically by title
+        MovieList.getInstance().sortMovies();
         List<Movie> movies = MovieList.getInstance().getMovies();
-
+    
         mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 33, 40));
-
+    
         int count = 0;
-
+    
         for (Movie movie : movies) {
             if (count >= 12) {
                 JOptionPane.showMessageDialog(null, "We apologize, but the program cannot handle more than 12 movies at once. Please remove a movie to add another one.", "Limit Exceeded", JOptionPane.ERROR_MESSAGE);
                 break;
             }
-
+    
             JPanel moviePanel = new JPanel(new GridLayout(4, 1));
             moviePanel.setBackground(new Color(255, 199, 199));
             moviePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-
+    
             JLabel titleLabel = new JLabel("Title: " + movie.getTitle());
             JLabel genreLabel = new JLabel("Genre: " + movie.getGenre());
             JLabel yearLabel = new JLabel("Year: " + movie.getReleaseYear());
-
+    
             JCheckBox checkBox = new JCheckBox();
-
+    
             moviePanel.setPreferredSize(new Dimension(200, 150));
-
+    
             moviePanel.add(titleLabel);
             moviePanel.add(genreLabel);
             moviePanel.add(yearLabel);
             moviePanel.add(checkBox);
-
+    
             mainPanel.add(moviePanel);
             count++;
         }
         mainPanel.revalidate();
         mainPanel.repaint();
-    }
-
+    }    
     private void loadMoviesFromWatchlist() {
         try (BufferedReader reader = new BufferedReader(new FileReader("watchlist.txt"))) {
             String line;
