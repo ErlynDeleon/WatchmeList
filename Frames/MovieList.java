@@ -36,7 +36,7 @@ public class MovieList {
 
     public void updateMovie(String currentTitle, String currentGenre, int currentYear, String newTitle, String newGenre, int newYear) {
         for (Movie movie : movies) {
-            if (movie.getTitle().equals(currentTitle) && movie.getGenre().equals(currentGenre) && movie.getReleaseYear() == currentYear) {
+            if (movie.getTitle() == currentTitle && movie.getGenre() == currentGenre && movie.getReleaseYear() == currentYear) {
                 movie.setTitle(newTitle);
                 movie.setGenre(newGenre);
                 movie.setReleaseYear(newYear);
@@ -46,15 +46,15 @@ public class MovieList {
     }
 
     public void removeMovie(String title, String genre, int releaseYear) {
-        movies.removeIf(movie ->
-                movie.getTitle().equals(title) &&
-                        movie.getGenre().equals(genre) &&
+                        movies.removeIf(movie ->
+                        movie.getTitle() == title &&
+                        movie.getGenre() == genre &&
                         movie.getReleaseYear() == releaseYear
         );
     }
 
     public Movie searchMovieByTitle(String title) {
-        sortMovies();
+        sortMoviesAlphabetically();
         int lo = 0;
         int hi = movies.size() - 1;
 
@@ -74,9 +74,22 @@ public class MovieList {
         return null;
     }
 
-    public void sortMovies() {
-        Collections.sort(movies, Comparator.comparing(Movie::getTitle));
+    public void sortMoviesAlphabetically() {
+        int n = movies.size();
+        Movie temp;
+        for (int i = 0; i < n-1; i++) {
+            for (int j = 0; j < n-i-1; j++) {
+               
+                if (movies.get(j).getTitle().compareTo(movies.get(j+1).getTitle()) > 0) {
+                  
+                    temp = movies.get(j);
+                    movies.set(j, movies.get(j+1));
+                    movies.set(j+1, temp);
+                }
+            }
+        }
     }
+    
 
     public Movie searchMovieByGenre(String genre) {
         int lo = 0;
@@ -107,7 +120,7 @@ public class MovieList {
         int high = movies.size() - 1;
     
         while (low <= high && releaseYear >= movies.get(low).getReleaseYear() && releaseYear <= movies.get(high).getReleaseYear()) {
-            // Calculate the position using interpolation formula
+            // interpolation algo
             int pos = low + ((releaseYear - movies.get(low).getReleaseYear()) * (high - low) / (movies.get(high).getReleaseYear() - movies.get(low).getReleaseYear()));
     
             if (movies.get(pos).getReleaseYear() == releaseYear) {

@@ -1,11 +1,9 @@
 package Frames;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.text.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -255,52 +253,60 @@ public class HomeFrame extends JFrame implements ActionListener, SaveListener {
             }
 
             // Initialize the search results list
-List<Movie> searchResults = new ArrayList<>();
+            List<Movie> searchResults = new ArrayList<>();
+            String searchTextLowerCase = searchText.toLowerCase();
 
-// Convert the search text to lowercase for case-insensitive matching
-String searchTextLowerCase = searchText.toLowerCase();
+            if (searchText.matches("\\d+")) {
+                // If the search text contains only digits, search for movies by release year
+            int releaseYear = Integer.parseInt(searchText);
+                // Use the updated search method to get all movies with the specified release year
+             searchResults.addAll(MovieList.getInstance().searchMovieByReleaseYear(releaseYear));
 
-if (searchText.matches("\\d+")) {
-    // If the search text contains only digits, search for movies by release year
-    int releaseYear = Integer.parseInt(searchText);
-    // Use the updated search method to get all movies with the specified release year
-    searchResults.addAll(MovieList.getInstance().searchMovieByReleaseYear(releaseYear));
-
-} else {
-    // Search for movies whose title or genre contains the entered text
-    for (Movie movie : MovieList.getInstance().getMovies()) {
-        // Check if the movie title or genre contains the search text
-        if (movie.getTitle().toLowerCase().contains(searchTextLowerCase) ||
-                movie.getGenre().toLowerCase().contains(searchTextLowerCase)) {
-            searchResults.add(movie);
+            } else {
+                // Search for movies whose title or genre contains the entered text
+                for (Movie movie : MovieList.getInstance().getMovies()) {
+                     if (movie.getTitle().toLowerCase().contains(searchTextLowerCase) ||
+                         movie.getGenre().toLowerCase().contains(searchTextLowerCase)) {
+                     searchResults.add(movie);
         }
     }
-}
-
-// Sort the search results alphabetically by title
-searchResults.sort(Comparator.comparing(Movie::getTitle, String.CASE_INSENSITIVE_ORDER));
-
-// Display search results
-if (searchResults.isEmpty()) {
-    new SearchMovie(null, "No movies found matching the search criteria.").setVisible(true);
-} else {
-    new SearchMovie(searchResults, null).setVisible(true);
-}
-
+}          
+                interpolationSort(searchResults);
+                // Display search results
+                if (searchResults.isEmpty()) {
+                     new SearchMovie(null, "No movies found matching the search criteria.").setVisible(true);
+            } else {
+                     new SearchMovie(searchResults, null).setVisible(true);
+                    }
         }
     }
+    //for title alphabetically order
+    private void interpolationSort(List<Movie> searchResults) {
+        int n = searchResults.size();
+        for (int i = 1; i < n; ++i) {
+            Movie key = searchResults.get(i);
+            int j = i - 1;
+        
+            while (j >= 0 && searchResults.get(j).getTitle().compareToIgnoreCase(key.getTitle()) > 0) {
+                searchResults.set(j + 1, searchResults.get(j));
+                j = j - 1;
+            }
+            searchResults.set(j + 1, key);
+        }
+    }
+    
     private void displayMovies() {
         mainPanel.removeAll();
     
-        // Sort the movies alphabetically by title
-        MovieList.getInstance().sortMovies();
-        List<Movie> movies = MovieList.getInstance().getMovies();
+        List<Movie> searchResults = MovieList.getInstance().getMovies();
+    
+        interpolationSort(searchResults);
     
         mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 33, 40));
     
         int count = 0;
     
-        for (Movie movie : movies) {
+        for (Movie movie : searchResults) {
             if (count >= 12) {
                 JOptionPane.showMessageDialog(null, "We apologize, but the program cannot handle more than 12 movies at once. Please remove a movie to add another one.", "Limit Exceeded", JOptionPane.ERROR_MESSAGE);
                 break;
@@ -328,7 +334,7 @@ if (searchResults.isEmpty()) {
         }
         mainPanel.revalidate();
         mainPanel.repaint();
-    }    
+    }
     private void loadMoviesFromWatchlist() {
         try (BufferedReader reader = new BufferedReader(new FileReader("watchlist.txt"))) {
             String line;
